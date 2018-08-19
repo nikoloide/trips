@@ -23,11 +23,11 @@ const COLOR_RANGE = [
 ];
 
 const LIGHT_SETTINGS = {
-  lightsPosition: [-0.144528, 49.739968, 8000, -3.807751, 54.104682, 8000],
-  ambientRatio: 0.4,
+  lightsPosition: [-74.05, 40.7, 8000, -73.5, 41, 5000],
+  ambientRatio: 0.05,
   diffuseRatio: 0.6,
-  specularRatio: 0.2,
-  lightsStrength: [0.8, 0.0, 0.8, 0.0],
+  specularRatio: 0.8,
+  lightsStrength: [2.0, 0.0, 0.0, 0.0],
   numberOfLights: 2
 };
 
@@ -43,26 +43,38 @@ function renderLayer () {
     options[key] = value;
   });
 
-  const screenGridLayer = new deck.ScreenGridLayer({
-    id: 'grid',
-    colorRange: COLOR_RANGE,
-    cellSizePixels: 1,
-    data,
-    elevationRange: [0, 1000],
-    elevationScale: 250,
-    extruded: true,
-    getPosition: d => d,
-    lightSettings: LIGHT_SETTINGS,
-    opacity: 1,
-    ...options
-  });
+const layers = [
+      new TripsLayer({
+        id: 'trips',
+        data: trips,
+        getPath: d => d.segments,
+        getColor: d => (d.vendor === 0 ? [253, 128, 93] : [23, 184, 190]),
+        opacity: 0.3,
+        strokeWidth: 2,
+        trailLength,
+        currentTime: time
+      }),
+        }),
+      new PolygonLayer({
+        id: 'buildings',
+        data: buildings,
+        extruded: true,
+        wireframe: false,
+        fp64: true,
+        opacity: 0.5,
+        getPolygon: f => f.polygon,
+        getElevation: f => f.height,
+        getFillColor: f => [74, 80, 87],
+        lightSettings: LIGHT_SETTINGS
+      })
+    ];
 
   deckgl.setProps({
-    layers: [screenGridLayer]
+    layers: [TripsLayer, PolygonLayer]
   });
 }
 
-d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv',
+d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips.json',
    (error, response) => {
   data = response.map(d => [Number(d.lng), Number(d.lat)]);
   renderLayer();
