@@ -1,6 +1,6 @@
 const deckgl = new deck.DeckGL({
   mapboxAccessToken: 'pk.eyJ1IjoibmlzYW50aWwiLCJhIjoiY2pnNTlyem5xN2hvMDMzczJjbDlncTA5ZSJ9.G4poDRUAwKLBYoKHaSlw7A',
-  mapStyle: 'https://free.tilehosting.com/styles/darkmatter/style.json?key=U0iNgiZKlYdwvgs9UPm1',
+  mapStyle: 'mapbox://styles/mapbox/dark-v9',
   longitude: -1.4157,
   latitude: 52.2324,
   zoom: 6,
@@ -121,7 +121,6 @@ render() {
         {baseMap && (
           <StaticMap
             reuseMaps
-            mapStyle="mapbox://styles/mapbox/dark-v9"
             preventStyleDiffing={true}
             mapboxApiAccessToken={MAPBOX_TOKEN}
           />
