@@ -6,7 +6,7 @@ import DeckGL, {PolygonLayer} from 'deck.gl';
 import TripsLayer from './trips';
 
 // Set your mapbox token here
-const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibmlzYW50aWwiLCJhIjoiY2pnNTlyem5xN2hvMDMzczJjbDlncTA5ZSJ9.G4poDRUAwKLBYoKHaSlw7A'; // eslint-disable-line
 
 // Source data CSV
 const DATA_URL = {
