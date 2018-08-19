@@ -83,7 +83,7 @@ export class App extends Component {
     const {buildings = DATA_URL.BUILDINGS, trips = DATA_URL.TRIPS, trailLength = 180} = this.props;
 
 const layers = [
-      new TripsLayer({
+      new deck.TripsLayer({
         id: 'trips',
         data: trips,
         getPath: d => d.segments,
@@ -94,7 +94,7 @@ const layers = [
         currentTime: time
       }),
         }),
-      new PolygonLayer({
+      new deck.PolygonLayer({
         id: 'buildings',
         data: buildings,
         extruded: true,
@@ -111,6 +111,21 @@ const layers = [
 render() {
     const {viewState, controller = true, baseMap = true} = this.props;
 
+  return (
+      <DeckGL
+        layers={this._renderLayers()}
+        initialViewState={INITIAL_VIEW_STATE}
+        viewState={viewState}
+        controller={controller}
+      >
+        {baseMap && (
+          <StaticMap
+            reuseMaps
+            mapStyle="mapbox://styles/mapbox/dark-v9"
+            preventStyleDiffing={true}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
+          />
+  
   deckgl.setProps({
     layers: [TripsLayer, PolygonLayer]
   });
