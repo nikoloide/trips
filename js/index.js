@@ -1,5 +1,5 @@
 const deckgl = new deck.DeckGL({
-  mapboxAccessToken: '',
+  mapboxAccessToken: 'pk.eyJ1IjoibmlzYW50aWwiLCJhIjoiY2pnNTlyem5xN2hvMDMzczJjbDlncTA5ZSJ9.G4poDRUAwKLBYoKHaSlw7A',
   mapStyle: 'https://free.tilehosting.com/styles/darkmatter/style.json?key=U0iNgiZKlYdwvgs9UPm1',
   longitude: -1.4157,
   latitude: 52.2324,
@@ -11,7 +11,7 @@ const deckgl = new deck.DeckGL({
 
 let data = null;
 
-const OPTIONS = ['radius', 'coverage', 'upperPercentile'];
+const MAPBOX_TOKEN = const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line; // eslint-disable-line
 
 const DATA_URL = {
   BUILDINGS:
