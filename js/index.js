@@ -13,6 +13,13 @@ let data = null;
 
 const OPTIONS = ['radius', 'coverage', 'upperPercentile'];
 
+const DATA_URL = {
+  BUILDINGS:
+    d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/buildings.json'), // eslint-disable-line
+  TRIPS:
+    d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips.json') // eslint-disable-line
+};
+
 const COLOR_RANGE = [
   [1, 152, 189],
   [73, 227, 206],
@@ -31,17 +38,49 @@ const LIGHT_SETTINGS = {
   numberOfLights: 2
 };
 
-OPTIONS.forEach(key => {
-  document.getElementById(key).oninput = renderLayer;
-});
+export const INITIAL_VIEW_STATE = {
+  longitude: -74,
+  latitude: 40.72,
+  zoom: 13,
+  maxZoom: 16,
+  pitch: 45,
+  bearing: 0
+};
 
-function renderLayer () {
-  const options = {};
-  OPTIONS.forEach(key => {
-    const value = document.getElementById(key).value;
-    document.getElementById(key + '-value').innerHTML = value;
-    options[key] = value;
-  });
+export class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: 0
+    };
+  }
+
+  componentDidMount() {
+    this._animate();
+  }
+
+  componentWillUnmount() {
+    if (this._animationFrame) {
+      window.cancelAnimationFrame(this._animationFrame);
+    }
+  }
+
+  _animate() {
+    const {
+      loopLength = 1800, // unit corresponds to the timestamp in source data
+      animationSpeed = 30 // unit time per second
+    } = this.props;
+    const timestamp = Date.now() / 1000;
+    const loopTime = loopLength / animationSpeed;
+
+    this.setState({
+      time: ((timestamp % loopTime) / loopTime) * loopLength
+    });
+    this._animationFrame = window.requestAnimationFrame(this._animate.bind(this));
+  }
+
+  _renderLayers() {
+    const {buildings = DATA_URL.BUILDINGS, trips = DATA_URL.TRIPS, trailLength = 180} = this.props;
 
 const layers = [
       new TripsLayer({
@@ -69,13 +108,13 @@ const layers = [
       })
     ];
 
+render() {
+    const {viewState, controller = true, baseMap = true} = this.props;
+
   deckgl.setProps({
     layers: [TripsLayer, PolygonLayer]
   });
 }
 
-d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips.json',
-   (error, response) => {
-  data = response.map(d => [Number(d.lng), Number(d.lat)]);
   renderLayer();
 });
