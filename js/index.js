@@ -46,7 +46,7 @@ function renderLayer () {
   const screenGridLayer = new deck.ScreenGridLayer({
     id: 'grid',
     colorRange: COLOR_RANGE,
-    cellSizePixels: 0.5,
+    cellSizePixels: 1,
     data,
     elevationRange: [0, 1000],
     elevationScale: 250,
