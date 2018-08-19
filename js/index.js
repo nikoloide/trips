@@ -43,9 +43,10 @@ function renderLayer () {
     options[key] = value;
   });
 
-  const ScreenGridLayer = new deck.ScreenGridLayer({
-    id: 'heatmap',
+  const screenGridLayer = new deck.ScreenGridLayer({
+    id: 'grid',
     colorRange: COLOR_RANGE,
+    cellSizePixels: 20,
     data,
     elevationRange: [0, 1000],
     elevationScale: 250,
@@ -57,7 +58,7 @@ function renderLayer () {
   });
 
   deckgl.setProps({
-    layers: [hexagonLayer]
+    layers: [screenGridLayer]
   });
 }
 
