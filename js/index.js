@@ -43,7 +43,7 @@ function renderLayer () {
     options[key] = value;
   });
 
-  const hexagonLayer = new deck.HexagonLayer({
+  const ScreenGridLayer = new deck.ScreenGridLayer({
     id: 'heatmap',
     colorRange: COLOR_RANGE,
     data,
