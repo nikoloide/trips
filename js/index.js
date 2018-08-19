@@ -1,33 +1,20 @@
-const deckgl = new deck.DeckGL({
-  mapboxAccessToken: 'pk.eyJ1IjoibmlzYW50aWwiLCJhIjoiY2pnNTlyem5xN2hvMDMzczJjbDlncTA5ZSJ9.G4poDRUAwKLBYoKHaSlw7A',
-  mapStyle: 'mapbox://styles/mapbox/dark-v9',
-  longitude: -1.4157,
-  latitude: 52.2324,
-  zoom: 6,
-  minZoom: 5,
-  maxZoom: 15,
-  pitch: 40.5
-});
+/* global window */
+import React, {Component} from 'react';
+import {render} from 'react-dom';
+import {StaticMap} from 'react-map-gl';
+import DeckGL, {PolygonLayer} from 'deck.gl';
+import TripsLayer from './trips-layer';
 
-let data = null;
+// Set your mapbox token here
+const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
-const MAPBOX_TOKEN = const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line; // eslint-disable-line
-
+// Source data CSV
 const DATA_URL = {
   BUILDINGS:
-    d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/buildings.json'), // eslint-disable-line
+    'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/buildings.json', // eslint-disable-line
   TRIPS:
-    d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips.json') // eslint-disable-line
+    'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips.json' // eslint-disable-line
 };
-
-const COLOR_RANGE = [
-  [1, 152, 189],
-  [73, 227, 206],
-  [216, 254, 181],
-  [254, 237, 177],
-  [254, 173, 84],
-  [209, 55, 78]
-];
 
 const LIGHT_SETTINGS = {
   lightsPosition: [-74.05, 40.7, 8000, -73.5, 41, 5000],
@@ -82,8 +69,8 @@ export class App extends Component {
   _renderLayers() {
     const {buildings = DATA_URL.BUILDINGS, trips = DATA_URL.TRIPS, trailLength = 180} = this.props;
 
-const layers = [
-      new deck.TripsLayer({
+    return [
+      new TripsLayer({
         id: 'trips',
         data: trips,
         getPath: d => d.segments,
@@ -91,10 +78,9 @@ const layers = [
         opacity: 0.3,
         strokeWidth: 2,
         trailLength,
-        currentTime: time
+        currentTime: this.state.time
       }),
-        }),
-      new deck.PolygonLayer({
+      new PolygonLayer({
         id: 'buildings',
         data: buildings,
         extruded: true,
@@ -103,15 +89,16 @@ const layers = [
         opacity: 0.5,
         getPolygon: f => f.polygon,
         getElevation: f => f.height,
-        getFillColor: f => [74, 80, 87],
+        getFillColor: [74, 80, 87],
         lightSettings: LIGHT_SETTINGS
       })
     ];
+  }
 
-render() {
+  render() {
     const {viewState, controller = true, baseMap = true} = this.props;
 
-  return (
+    return (
       <DeckGL
         layers={this._renderLayers()}
         initialViewState={INITIAL_VIEW_STATE}
@@ -121,14 +108,16 @@ render() {
         {baseMap && (
           <StaticMap
             reuseMaps
+            mapStyle="mapbox://styles/mapbox/dark-v9"
             preventStyleDiffing={true}
             mapboxApiAccessToken={MAPBOX_TOKEN}
           />
-  
-  deckgl.setProps({
-    layers: [TripsLayer, PolygonLayer]
-  });
+        )}
+      </DeckGL>
+    );
+  }
 }
 
-  renderLayer();
-});
+export function renderToDOM(container) {
+  render(<App />, container);
+}
